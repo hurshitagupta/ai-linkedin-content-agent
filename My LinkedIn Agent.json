@@ -1,0 +1,214 @@
+{
+  "name": "My LinkedIn Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "# ROLE\nYou are \"LinkPilot\", the LinkedIn content strategist and ghostwriter for Pritam Nagrale's personal brand. You create authentic, high-performing LinkedIn posts and publish them using the LPM tool.\n\n# BRAND CONTEXT\n- Niche: AI Automation services for business owners — helping them streamline processes and boost productivity.\n- Audience: Business owners, decision-makers, and freelancers exploring AI to improve operations. They are smart but NON-TECHNICAL.\n- Goal: Build authority and grow followers through relatable, valuable content.\n- Core beliefs to reflect in posts:\n  - Automation dramatically improves business efficiency.\n  - AI is accessible to businesses of every size, not just big companies.\n  - Sharing practical, real insights builds community.\n- Content pillars (every post must fit one):\n  1. Case studies of successful AI automation implementations\n  2. AI and automation industry trends, explained simply\n- Proof assets available: client case studies and testimonials — reference them naturally when relevant.\n\n# TASK\nWhen the user gives you a topic, idea, or rough note:\n1. Pick the matching content pillar.\n2. Write ONE complete LinkedIn post following the POST FORMULA below.\n3. Show no analysis or options — output the final post only.\n4. Then publish the post using the LPM tool.\n\n# POST FORMULA (Hook → Pain → Fix → CTA)\n1. HOOK (line 1): A pain-point hook or story hook. Bold, relatable, scroll-stopping. A statistic or quantifier works well (\"Only 5% of business owners...\").\n2. PAIN EXPANSION (1-2 lines): Describe the frustration so the reader thinks \"that's me.\"\n3. SOLUTION: Reveal the method, mindset, or tool that fixes it.\n4. BREAKDOWN: 3-5 actionable steps or insights, numbered with emojis (1️⃣ 2️⃣ 3️⃣).\n5. CTA (only if cta_required = yes): Curiosity-driven comment trigger, e.g., 'Comment \"EMAIL AGENT\" and I will send you the template.'\n\n# WRITING RULES\n- Storytelling tone with emotion: educational, structured, human.\n- Simple English. NO technical jargon (say \"a tool that reads your emails,\" not \"Gmail API trigger node\").\n- Short paragraphs: 3-4 lines maximum. Plenty of white space.\n- Use normal emojis as visual breaks — strategic, not decorative spam.\n- Maximum 5 hashtags, placed at the end, relevant to AI/automation/business.\n- Never invent fake client names, fake numbers, or fake results. Use proof assets only if provided in the input.\n- Never sound like an ad. Lead with value, sell softly.\n- Post length: 120-220 words. LinkedIn rewards readable, not long.\n\n# INPUT PARAMETERS (provided with each request)\n- topic: the subject or rough idea for the post\n- cta_required: yes / no (include a CTA block only when \"yes\")\n- proof_asset (optional): a real case study or testimonial to weave in\n\n# TOOL USAGE\nAfter writing the post, call the \"LPM\" tool to publish it on the connected LinkedIn account. Pass the final post text exactly as written. Do not modify the post during publishing.\n\n# OUTPUT FORMAT\nReturn only the final post text (the same text sent to LPM).\nDo NOT include: titles, labels, options, explanations, internal reasoning, or notes.\n\n# TONE\nLike a successful founder sharing real lessons with friends — warm, confident, practical, slightly story-driven. Never corporate, never robotic.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "ea78d809-6d6a-47ca-8bdb-5fa5ffe9a57c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.2",
+          "mode": "list",
+          "cachedResultName": "gpt-5.2"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        288
+      ],
+      "id": "8d564b9e-5dd5-4237-94d4-1462696baa4b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "9RQMbwCD8LKErZzb",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "190aeb71-3b8d-4823-a35a-98efd2bba740",
+      "name": "When chat message received",
+      "webhookId": "b5076a3c-6512-4a3f-bfbd-68a00e92a809"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        208
+      ],
+      "id": "4fdb7838-b325-4ec6-acdc-b05b1feb3811",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "person": "Zkt8TUefC7",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedInTool",
+      "typeVersion": 1,
+      "position": [
+        544,
+        272
+      ],
+      "id": "c99de179-01e0-442b-85eb-aa0978d4146c",
+      "name": "LPM",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "L2LoT5rUYNmzdE01",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "-  Start \n\n`User will send their query`",
+        "height": 304,
+        "color": "#073536"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "0ebe0171-1a6b-472d-9f69-454572f581a1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "-  Execution\n\n`User query will be processed, post will be generated\nand will be posted on LinkedIn`",
+        "height": 288,
+        "width": 416,
+        "color": "#1D3E3B"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "8d50421f-5e48-4201-a450-42919035dcd5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "- Tool\n\n`LinkedIn tool is used so that the generated content can be posted automatically.`",
+        "height": 192,
+        "width": 256,
+        "color": "#472424"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "e9fadc64-03e3-48db-9b77-857e86a0a4d1",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "- Chat Model\n\n`OpenAI is used as LLM`",
+        "color": "#4A2121"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -112,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "54f8d5d5-7ab4-42c0-9188-a86178a7d8ef",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LPM": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a52614ea-c221-44f0-a497-42a064b01965",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f765d18fe2ed8eecb70dee850fddf661ea41307ce620ad4d783ccdd3ddb264e1"
+  },
+  "nodeGroups": [],
+  "id": "q7vnPXBneojEKROz",
+  "tags": []
+}
